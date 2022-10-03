@@ -7,5 +7,13 @@ def get_entities(filters):
     type = filters.get("type")
     if type:
         query = query.filter(Entity.type == type)
+    
+    status = filters.get("status")
+    if status:
+        query = query.filter(Entity.status == status)
+    
+    name = filters.get("name")
+    if name:
+        query = query.filter(Entity.name == name)
 
     return query

@@ -18,6 +18,7 @@ db = SQLAlchemy()
 
 def create_app(env=None):
     app = Flask(__name__)
+    app.url_map.strict_slashes = False
 
     env = env or os.environ.get("env", "default")
     app.config.from_object(CONFIG_MAP.get(env, "default"))
@@ -38,6 +39,9 @@ def create_app(env=None):
 
 
 def resource_error_handler(error):
+    import logging
+    logger = logging.getLogger(__name__)
+    logging.error(error)
     return jsonify({"message": "Resource not found.", "error": "not_found"}), 404
 
 

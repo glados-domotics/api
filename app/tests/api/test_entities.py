@@ -96,3 +96,36 @@ def test_get_entities_with_type_filter(client, entities, mocker):
             "created_at": mocker.ANY
         }
     ]
+
+
+#tests que j'ai créés: -->
+
+def test_get_entities_with_status_filter(client, entities, mocker):
+    response = client.get("/entities?status=off")
+
+    assert response.status_code == 200
+    assert response.json == [
+        {
+            "id": "00000000-0000-0000-0000-000000000001",
+            "name": "Ceiling Light",
+            "type": "light",
+            "status": "off",
+            "value": None,
+            "created_at": mocker.ANY
+        }
+    ]
+
+def test_get_entities_with_name_filter(client, entities, mocker):
+    response = client.get("entities?name=Thermometer")
+
+    assert response.status_code == 200
+    assert response.json == [
+        {
+            "id": "00000000-0000-0000-0000-000000000003",
+            "name": "Thermometer",
+            "type": "sensor",
+            "status": "on",
+            "value": "28",
+            "created_at": mocker.ANY
+        }
+    ]
