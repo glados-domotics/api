@@ -16,6 +16,9 @@ prod:
 test:
 	docker-compose -f docker-compose-test.yml run --rm server coverage run -m pytest
 
+test_db_upgrade:
+	docker-compose -f docker-compose-test.yml run --rm server flask db upgrade
+
 coverage:
 	docker-compose -f docker-compose-test.yml run --rm server coverage report
 
@@ -31,6 +34,9 @@ db:
 
 db_history:
 	docker-compose run --rm server flask db history
+
+db_migrate:
+	docker-compose exec -T server flask db migrate
 
 db_upgrade:
 	docker-compose exec -T server flask db upgrade
