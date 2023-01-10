@@ -31,7 +31,7 @@ Every new endpoints, services, providers should be unit tested.
 ### Run tests
 You can easily run all pytests using :
 ```
-make tests
+make test
 ```
 
 ### Run coverage
