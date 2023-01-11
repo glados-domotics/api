@@ -61,6 +61,7 @@ def test_get_entities(client, entities, mocker):
             "type": "light",
             "status": "off",
             "value": None,
+            "room_id": "00000000-0000-0000-0000-000000000001",
             "created_at": mocker.ANY
         },
         {
@@ -69,6 +70,7 @@ def test_get_entities(client, entities, mocker):
             "type": "light",
             "status": "on",
             "value": "200",
+            "room_id": "00000000-0000-0000-0000-000000000002",
             "created_at": mocker.ANY
         },
         {
@@ -77,6 +79,7 @@ def test_get_entities(client, entities, mocker):
             "type": "sensor",
             "status": "on",
             "value": "28",
+            "room_id": "00000000-0000-0000-0000-000000000002",
             "created_at": mocker.ANY
         }
     ]
@@ -93,6 +96,7 @@ def test_get_entities_with_type_filter(client, entities, mocker):
             "type": "sensor",
             "status": "on",
             "value": "28",
+            "room_id": "00000000-0000-0000-0000-000000000002",
             "created_at": mocker.ANY
         }
     ]
@@ -109,6 +113,7 @@ def test_get_entities_with_status_filter(client, entities, mocker):
             "type": "light",
             "status": "on",
             "value": "200",
+            "room_id": "00000000-0000-0000-0000-000000000002",
             "created_at": mocker.ANY
         },
         {
@@ -117,12 +122,16 @@ def test_get_entities_with_status_filter(client, entities, mocker):
             "type": "sensor",
             "status": "on",
             "value": "28",
+            "room_id": "00000000-0000-0000-0000-000000000002",
             "created_at": mocker.ANY
         }
     ]
 
 
 def test_get_entities_with_status_and_type_filters(client, entities, mocker):
+    """
+    Should returns filtered entries if both parameters are applied
+    """
     response = client.get("/entities?status=on&type=sensor")
 
     assert response.status_code == 200
@@ -133,6 +142,26 @@ def test_get_entities_with_status_and_type_filters(client, entities, mocker):
             "type": "sensor",
             "status": "on",
             "value": "28",
+            "room_id": "00000000-0000-0000-0000-000000000002",
             "created_at": mocker.ANY
         }
     ]
+
+
+def test_get_entities_with_invalid_room_id_length(client):
+    response = client.get("/entities?room_id=d9ec9a2f-6fd7-4e3c-ad29-7e293dcaa18d1")
+
+    assert response.status_code == 422
+    assert response.json == {"errors": {
+        "room_id": ["The room_id length is incorrect; it should be 36 characters (UUID4 length). 37 characters were provided"]
+    }}
+
+
+def test_get_entities_with_wrong_room_id(client, entities):
+    """
+    Should returns filtered entries if both parameters are applied
+    """
+    response = client.get("/entities?room_id=" + str(uuid.UUID(int=3)))
+
+    assert response.status_code == 200
+    assert response.json == []
