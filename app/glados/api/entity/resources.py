@@ -1,5 +1,6 @@
 from flask import request
 from flask_restful import Resource, abort
+import os
 
 from glados.api.entity.serializers import EntitiesRequestSerializer, EntityResponseSerializer, EntityPatchRequestSerializer
 from glados.repositories.entities import get_entities, get_entity, patch_entity
@@ -29,8 +30,12 @@ class EntityAPI(Resource):
         return result, 200
 
     def patch(self, entity_id):
+        if not ('Authorization' in request.headers and request.headers['Authorization'][7:] == os.environ.get("BEARER_TOKEN")):
+            abort(401, message="You're not authorized to perform this action. Bearer token requierd")
+
         request_serializer = EntityPatchRequestSerializer()
         data = request_serializer.load(request.form)
+
 
         entity = patch_entity(data, entity_id)
 
