@@ -12,3 +12,5 @@ api.add_resource(misc_resources.VersionAPI, "/")
 
 # Entities endpoints
 api.add_resource(entity_resources.EntitiesAPI, "/entities")
+# GET & PATCH
+api.add_resource(entity_resources.EntityAPI, "/entities/<entity_id>")   # a UUID param is expected

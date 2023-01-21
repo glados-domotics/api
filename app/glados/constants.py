@@ -13,3 +13,6 @@ class EntityStatus(enum.IntEnum):
     on = 1
     off = 2
     unavailable = 3
+
+
+CHANNELS = ("TF1", "France2", "France3", "Arte", "France5", "M6")
