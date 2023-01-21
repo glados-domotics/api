@@ -62,6 +62,11 @@ def test_get_entities(client, entities, mocker):
             "status": "off",
             "value": None,
             "room_id": "00000000-0000-0000-0000-000000000001",
+            "room" : {
+                "id": "00000000-0000-0000-0000-000000000001",
+                "name": "Kitchen",
+                "created_at": mocker.ANY
+            },
             "created_at": mocker.ANY
         },
         {
@@ -71,6 +76,11 @@ def test_get_entities(client, entities, mocker):
             "status": "on",
             "value": "200",
             "room_id": "00000000-0000-0000-0000-000000000002",
+            "room" : {
+                "id": "00000000-0000-0000-0000-000000000002",
+                "name": "Living Room",
+                "created_at": mocker.ANY
+            },
             "created_at": mocker.ANY
         },
         {
@@ -80,6 +90,11 @@ def test_get_entities(client, entities, mocker):
             "status": "on",
             "value": "28",
             "room_id": "00000000-0000-0000-0000-000000000002",
+            "room" : {
+                "id": "00000000-0000-0000-0000-000000000002",
+                "name": "Living Room",
+                "created_at": mocker.ANY
+            },
             "created_at": mocker.ANY
         }
     ]
@@ -97,6 +112,11 @@ def test_get_entities_with_type_filter(client, entities, mocker):
             "status": "on",
             "value": "28",
             "room_id": "00000000-0000-0000-0000-000000000002",
+            "room" : {
+                "id": "00000000-0000-0000-0000-000000000002",
+                "name": "Living Room",
+                "created_at": mocker.ANY
+            },
             "created_at": mocker.ANY
         }
     ]
@@ -114,6 +134,11 @@ def test_get_entities_with_status_filter(client, entities, mocker):
             "status": "on",
             "value": "200",
             "room_id": "00000000-0000-0000-0000-000000000002",
+            "room" : {
+                "id": "00000000-0000-0000-0000-000000000002",
+                "name": "Living Room",
+                "created_at": mocker.ANY
+            },
             "created_at": mocker.ANY
         },
         {
@@ -123,6 +148,11 @@ def test_get_entities_with_status_filter(client, entities, mocker):
             "status": "on",
             "value": "28",
             "room_id": "00000000-0000-0000-0000-000000000002",
+            "room" : {
+                "id": "00000000-0000-0000-0000-000000000002",
+                "name": "Living Room",
+                "created_at": mocker.ANY
+            },
             "created_at": mocker.ANY
         }
     ]
@@ -143,6 +173,11 @@ def test_get_entities_with_status_and_type_filters(client, entities, mocker):
             "status": "on",
             "value": "28",
             "room_id": "00000000-0000-0000-0000-000000000002",
+            "room" : {
+                "id": "00000000-0000-0000-0000-000000000002",
+                "name": "Living Room",
+                "created_at": mocker.ANY
+            },
             "created_at": mocker.ANY
         }
     ]
@@ -165,3 +200,36 @@ def test_get_entities_with_wrong_room_id(client, entities):
 
     assert response.status_code == 200
     assert response.json == []
+
+
+def test_get_one_entitiy(client, entities, mocker):
+    """
+    Should returns th one entry
+    """
+    response = client.get("/entities/00000000-0000-0000-0000-000000000003")
+
+    assert response.status_code == 200
+    assert response.json == {
+        "id": "00000000-0000-0000-0000-000000000003",
+        "name": "Thermometer",
+        "type": "sensor",
+        "status": "on",
+        "value": "28",
+        "room_id": "00000000-0000-0000-0000-000000000002",
+        "room" : {
+            "id": "00000000-0000-0000-0000-000000000002",
+            "name": "Living Room",
+            "created_at": mocker.ANY
+        },
+        "created_at": mocker.ANY
+    }
+
+
+def test_get_one_entitiy_with_wrong_id(client, entities):
+    """
+    Should return an error message with 404 status
+    """
+    response = client.get("/entities/0ed43070-86d4-4ed1-b03c-f88763ec5045")
+
+    assert response.status_code == 404
+    assert response.json == {"message": "Entity 0ed43070-86d4-4ed1-b03c-f88763ec5045 doesn't exist"}

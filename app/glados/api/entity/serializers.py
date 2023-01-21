@@ -3,6 +3,8 @@ from marshmallow import fields, validate, ValidationError
 from glados import ma, constants
 from glados.models import Entity, Room
 
+from glados.api.room.serializers import RoomSerializer, RoomResponseSerializer
+
 def validate_room_id_existance(room_id):
     if room_id is None:
         raise ValidationError("The room_id is None")
@@ -22,6 +24,7 @@ class EntitySerializer(ma.Schema):
 
     class Meta:
         model = Entity
+        include_relationships = True
         ordered = True
         fields = [
             "id",
@@ -30,8 +33,10 @@ class EntitySerializer(ma.Schema):
             "status",
             "value",
             "room_id",
+            "room",
             "created_at"
         ]
+    room = ma.Nested(RoomSerializer)
 
 
 class EntityResponseSerializer(EntitySerializer):
