@@ -32,7 +32,6 @@ class EntityAPI(Resource):
     def patch(self, entity_id):
         if not ('Authorization' in request.headers and request.headers['Authorization'][7:] == os.environ.get("BEARER_TOKEN")):
             abort(401, message="You're not authorized to perform this action. Bearer token requierd")
-
         request_serializer = EntityPatchRequestSerializer()
         data = request_serializer.load(request.form)
 

@@ -34,7 +34,7 @@ def patch_entity(filters, entity_id):
     query = query.get(entity_id)
 
     if query:
-        if "value" in filters: query.value = filters["value"]
+        if "value" in filters: query.value = float(filters["value"])
         if "status" in filters: query.status = filters["status"]
         db.session.commit()
 
