@@ -11,3 +11,7 @@ class RoomSerializer(ma.Schema):
             "id",
             "name",
         ]
+
+
+class RoomResponseSerializer(RoomSerializer):
+    pass

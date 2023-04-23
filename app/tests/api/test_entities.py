@@ -187,3 +187,30 @@ def test_get_entities_with_two_filters(client, entities, mocker):
             }
         },
     ]
+
+
+def test_patch_entities_with_type_filters(client, entities):
+    response = client.patch('/entity/00000000-0000-0000-0000-000000000001', json={'type': "sensor"})
+
+    assert response.status_code == 200
+
+    entity = Entity.query.get('00000000-0000-0000-0000-000000000001')
+    assert entity.type == "sensor"
+
+
+def test_patch_entities_without_wrong_id(client, entities):
+    response = client.patch('/entity/12', json={'type': "sensor"})
+
+    assert response.status_code == 500
+    print(response.json)
+    assert response.json == {'error': 'internal_error', 'message': 'Internal error.'}
+
+
+def test_patch_entities_with_room_filters(client, entities):
+    response = client.patch('/entity/00000000-0000-0000-0000-000000000001', json={'room': "00000000-0000-0000-0000-000000000002"})
+
+    assert response.status_code == 200
+
+    entity = Entity.query.get('00000000-0000-0000-0000-000000000001')
+    print(entity.room_id)
+    assert entity.room_id == uuid.UUID(int=2)

@@ -11,6 +11,15 @@ class EntitiesRequestSerializer(ma.Schema):
     room = fields.String(required=False)
 
 
+class EntitiesPatchRequestSerializer(ma.Schema):
+    type = fields.String(required=False, validate=validate.OneOf([x.name for x in constants.EntityType]))
+    status = fields.Boolean()
+    name = fields.String(required=False)
+    value = fields.String(required=False)
+    created_at = fields.String(required=False)
+    room = fields.String(required=False)
+
+
 class EntitySerializer(ma.Schema):
     created_at = fields.DateTime("%Y-%m-%dT%H:%M:%S")
     room = fields.Nested(RoomSerializer)
