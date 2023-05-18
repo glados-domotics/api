@@ -65,6 +65,7 @@ def test_get_entities_with_invalid_data(client):
 
     response = client.get("/entities?&room=invalid")
 
+
 def test_get_entities(client, entities, mocker):
     response = client.get("/entities")
 
@@ -112,6 +113,7 @@ def test_get_entities_with_type_filter(client, entities, mocker):
         }
     ]
 
+
 def test_get_entities_with_room_filter(client, entities, mocker):
     response = client.get("/entities?room=living_room")
 
@@ -135,6 +137,7 @@ def test_get_entities_with_room_filter(client, entities, mocker):
         }
     ]
 
+
 def test_get_entities_with_status_filter(client, entities, mocker):
     response = client.get("/entities?status=on")
 
@@ -157,6 +160,7 @@ def test_get_entities_with_status_filter(client, entities, mocker):
             "created_at": mocker.ANY
         }
     ]
+
 
 def test_get_entities_with_multiple_filters(client, entities, mocker):
     response = client.get("/entities?room=living_room&type=sensor&status=on")

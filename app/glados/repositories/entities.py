@@ -7,6 +7,7 @@ ROOM_QUERY_TO_DB_MAPPER = {
     "bathroom": "Bathroom"
 }
 
+
 def get_entities(filters):
     query = Entity.query
     type = filters.get("type")
