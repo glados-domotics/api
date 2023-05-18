@@ -77,7 +77,8 @@ def test_get_entities(client, entities, mocker):
             "type": "light",
             "status": "off",
             "value": None,
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room_name": "Kitchen",
         },
         {
             "id": "00000000-0000-0000-0000-000000000002",
@@ -85,7 +86,8 @@ def test_get_entities(client, entities, mocker):
             "type": "light",
             "status": "on",
             "value": "200",
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room_name": "Living Room",
         },
         {
             "id": "00000000-0000-0000-0000-000000000003",
@@ -93,7 +95,8 @@ def test_get_entities(client, entities, mocker):
             "type": "sensor",
             "status": "on",
             "value": "28",
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room_name": "Living Room"
         }
     ]
 
@@ -109,7 +112,8 @@ def test_get_entities_with_type_filter(client, entities, mocker):
             "type": "sensor",
             "status": "on",
             "value": "28",
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room_name": "Living Room"
         }
     ]
 
@@ -125,7 +129,8 @@ def test_get_entities_with_room_filter(client, entities, mocker):
             "type": "light",
             "status": "on",
             "value": "200",
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room_name": "Living Room",
         },
         {
             "id": "00000000-0000-0000-0000-000000000003",
@@ -133,7 +138,8 @@ def test_get_entities_with_room_filter(client, entities, mocker):
             "type": "sensor",
             "status": "on",
             "value": "28",
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room_name": "Living Room"
         }
     ]
 
@@ -149,7 +155,8 @@ def test_get_entities_with_status_filter(client, entities, mocker):
             "type": "light",
             "status": "on",
             "value": "200",
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room_name": "Living Room",
         },
         {
             "id": "00000000-0000-0000-0000-000000000003",
@@ -157,7 +164,8 @@ def test_get_entities_with_status_filter(client, entities, mocker):
             "type": "sensor",
             "status": "on",
             "value": "28",
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room_name": "Living Room",
         }
     ]
 
@@ -173,6 +181,7 @@ def test_get_entities_with_multiple_filters(client, entities, mocker):
             "type": "sensor",
             "status": "on",
             "value": "28",
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room_name": "Living Room"
         }
     ]

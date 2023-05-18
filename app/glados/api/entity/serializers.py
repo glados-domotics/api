@@ -13,16 +13,20 @@ class EntitiesRequestSerializer(ma.Schema):
 class EntitySerializer(ma.Schema):
     created_at = fields.DateTime("%Y-%m-%dT%H:%M:%S")
 
+    room_name = ma.Function(lambda obj: obj.room.name if obj.room else None)
+
     class Meta:
         model = Entity
         ordered = True
+        include_fk = True
         fields = [
             "id",
             "name",
             "type",
             "status",
             "value",
-            "created_at"
+            "created_at",
+            "room_name"
         ]
 
 
