@@ -49,6 +49,21 @@ def test_get_entities_with_invalid_data(client):
         "type": ["Must be one of: sensor, light, switch, multimedia, air_conditioner."]
     }}
 
+    response = client.get("/entities?room=invalid")
+
+    assert response.status_code == 422
+    assert response.json == {"errors": {
+        "room": ["Must be one of: living_room, kitchen, bedroom, bathroom."]
+    }}
+
+    response = client.get("/entities?&status=invalid")
+
+    assert response.status_code == 422
+    assert response.json == {"errors": {
+        "status": ["Must be one of: on, off, unavailable."]
+    }}
+
+    response = client.get("/entities?&room=invalid")
 
 def test_get_entities(client, entities, mocker):
     response = client.get("/entities")
@@ -84,6 +99,67 @@ def test_get_entities(client, entities, mocker):
 
 def test_get_entities_with_type_filter(client, entities, mocker):
     response = client.get("/entities?type=sensor")
+
+    assert response.status_code == 200
+    assert response.json == [
+        {
+            "id": "00000000-0000-0000-0000-000000000003",
+            "name": "Thermometer",
+            "type": "sensor",
+            "status": "on",
+            "value": "28",
+            "created_at": mocker.ANY
+        }
+    ]
+
+def test_get_entities_with_room_filter(client, entities, mocker):
+    response = client.get("/entities?room=living_room")
+
+    assert response.status_code == 200
+    assert response.json == [
+        {
+            "id": "00000000-0000-0000-0000-000000000002",
+            "name": "Lamp",
+            "type": "light",
+            "status": "on",
+            "value": "200",
+            "created_at": mocker.ANY
+        },
+        {
+            "id": "00000000-0000-0000-0000-000000000003",
+            "name": "Thermometer",
+            "type": "sensor",
+            "status": "on",
+            "value": "28",
+            "created_at": mocker.ANY
+        }
+    ]
+
+def test_get_entities_with_status_filter(client, entities, mocker):
+    response = client.get("/entities?status=on")
+
+    assert response.status_code == 200
+    assert response.json == [
+        {
+            "id": "00000000-0000-0000-0000-000000000002",
+            "name": "Lamp",
+            "type": "light",
+            "status": "on",
+            "value": "200",
+            "created_at": mocker.ANY
+        },
+        {
+            "id": "00000000-0000-0000-0000-000000000003",
+            "name": "Thermometer",
+            "type": "sensor",
+            "status": "on",
+            "value": "28",
+            "created_at": mocker.ANY
+        }
+    ]
+
+def test_get_entities_with_multiple_filters(client, entities, mocker):
+    response = client.get("/entities?room=living_room&type=sensor&status=on")
 
     assert response.status_code == 200
     assert response.json == [
