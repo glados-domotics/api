@@ -8,6 +8,7 @@ class EntitiesRequestSerializer(ma.Schema):
     type = fields.String(required=False, validate=validate.OneOf([x.name for x in constants.EntityType]))
     room = fields.String(required=False, validate=validate.OneOf([x.name for x in constants.EntityRoom]))
     status = fields.String(required=False, validate=validate.OneOf([x.name for x in constants.EntityStatus]))
+    id = fields.UUID(required=False)
 
 
 class EntitySerializer(ma.Schema):
