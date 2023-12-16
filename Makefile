@@ -13,8 +13,8 @@ logs:
 prod:
 	docker-compose -f docker-compose-prod.yml up -d
 
-test:
-	docker-compose -f docker-compose-test.yml run --rm server coverage run -m pytest
+test: run
+	docker-compose -f docker-compose-test.yml run --rm server coverage run -m pytest -vv -s
 
 coverage:
 	docker-compose -f docker-compose-test.yml run --rm server coverage report
@@ -37,6 +37,9 @@ db_upgrade:
 
 db_downgrade:
 	docker-compose run --rm server flask db downgrade
+
+db_migrate:
+	docker-compose run --rm server flask db migrate -m "$(MSG)"
 
 shell:
 	docker-compose exec server flask shell
