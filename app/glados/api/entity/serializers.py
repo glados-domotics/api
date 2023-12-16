@@ -1,28 +1,16 @@
-from marshmallow import fields, validate
+import marshmallow
+from marshmallow_sqlalchemy import auto_field
 
 from glados import ma, constants
 from glados.models import Entity
 
 
-class EntitiesRequestSerializer(ma.Schema):
-    type = fields.String(required=False, validate=validate.OneOf([x.name for x in constants.EntityType]))
-
-
-class EntitySerializer(ma.Schema):
-    created_at = fields.DateTime("%Y-%m-%dT%H:%M:%S")
-
+class EntitySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Entity
+        include_fk = True
+        # Make Scheme.dump() output an OrderedDict
         ordered = True
-        fields = [
-            "id",
-            "name",
-            "type",
-            "status",
-            "value",
-            "created_at"
-        ]
 
-
-class EntityResponseSerializer(EntitySerializer):
-    pass
+    type = auto_field(validate=marshmallow.validate.OneOf([x.name for x in constants.EntityType]))
+    status = auto_field(validate=marshmallow.validate.OneOf([x.name for x in constants.EntityStatus]))

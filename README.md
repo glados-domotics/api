@@ -4,6 +4,7 @@
 - Python 3
 - Docker
 - Flake8
+- pg_config for psycopg2 on macOS on ARM
 
 ## Prepare container
 
@@ -29,9 +30,9 @@ The `coverage` is the percentage of code covered by all the tests in the applica
 Every new endpoints, services, providers should be unit tested.
 
 ### Run tests
-You can easily run all pytests using :
+You can easily run all `pytests` using :
 ```
-make tests
+make test
 ```
 
 ### Run coverage
@@ -70,9 +71,9 @@ make logs
 ```
 
 
-## Database managment
+## Database management
 
-Adminer (formerly phpMinAdmin) is a full-featured database management tool written in PHP. Conversely to phpMyAdmin, it consist of a single file ready to deploy to the target server. Adminer is available for MySQL, MariaDB, PostgreSQL, SQLite, MS SQL, Oracle, Elasticsearch, MongoDB and others via plugin.
+Adminer (formerly phpMinAdmin) is a full-featured database management tool written in PHP. Conversely, to phpMyAdmin, it consists of a single file ready to deploy to the target server. Adminer is available for MySQL, MariaDB, PostgreSQL, SQLite, MS SQL, Oracle, Elasticsearch, MongoDB and others via plugin.
 
 You can easily access Adminer via your web browser on `localhost` and port you choose in your `.env`.
 
@@ -83,3 +84,15 @@ username: `postgres`
 password: `root`
 database: `glados`
 ```
+
+### Schema Modification
+
+When changing the schema, make sure to do the following:
+- Create the migration `make db_migrate MSG="YOUR MESSAGE"`
+- Upgrade the DB `make db_upgrade`
+- Commit the migration file `git commit -a app/migrations/versions/...`
+
+## TODOs
+
+- Add flake8 as a dev dependency
+- Fix psycopg2/psycopg2-binary for macOS on ARM
