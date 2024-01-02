@@ -19,7 +19,8 @@ def entities():
         type=constants.EntityType.light.name,
         status=constants.EntityStatus.off.name,
         value=None,
-        room_id=kitchen.id)
+        room_id=kitchen.id
+    )
     entity.save(commit=False)
 
     entity = Entity(
@@ -61,7 +62,8 @@ def test_get_entities(client, entities, mocker):
             "type": "light",
             "status": "off",
             "value": None,
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room": mocker.ANY
         },
         {
             "id": "00000000-0000-0000-0000-000000000002",
@@ -69,7 +71,8 @@ def test_get_entities(client, entities, mocker):
             "type": "light",
             "status": "on",
             "value": "200",
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room": mocker.ANY
         },
         {
             "id": "00000000-0000-0000-0000-000000000003",
@@ -77,7 +80,8 @@ def test_get_entities(client, entities, mocker):
             "type": "sensor",
             "status": "on",
             "value": "28",
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room": mocker.ANY
         }
     ]
 
@@ -93,6 +97,85 @@ def test_get_entities_with_type_filter(client, entities, mocker):
             "type": "sensor",
             "status": "on",
             "value": "28",
-            "created_at": mocker.ANY
+            "created_at": mocker.ANY,
+            "room": mocker.ANY
         }
     ]
+
+def test_get_entities_with_invalid_data_status(client):
+    response = client.get("/entities?status=invalid")
+
+    assert response.status_code == 422
+    assert response.json == {"errors": {
+        "status": ["Must be one of: on, off, unavailable."]
+    }}
+
+def test_get_entities_with_status_filter(client, entities, mocker):
+    response = client.get("/entities?status=on")
+
+    assert response.status_code == 200
+    assert response.json == [
+        {
+            "id": "00000000-0000-0000-0000-000000000002",
+            "name": "Lamp",
+            "type": "light",
+            "status": "on",
+            "value": "200",
+            "created_at": mocker.ANY,
+            "room": mocker.ANY
+        },
+        {
+            "id": "00000000-0000-0000-0000-000000000003",
+            "name": "Thermometer",
+            "type": "sensor",
+            "status": "on",
+            "value": "28",
+            "created_at": mocker.ANY,
+            "room": mocker.ANY
+        }
+    ]
+
+def test_get_entities_with_invalid_data_status(client):
+    response = client.get("/entities?room=invalid")
+
+    assert response.status_code == 422
+    assert response.json == {"errors": {
+        "room": ["Not a valid UUID."]
+    }}
+
+def test_get_entities_with_room_filter(client, entities, mocker):
+    response = client.get("/entities?room=00000000-0000-0000-0000-000000000001")
+
+    assert response.status_code == 200
+    assert response.json == [
+        {
+            "id": "00000000-0000-0000-0000-000000000001",
+            "name": "Ceiling Light",
+            "type": "light",
+            "status": "off",
+            "value": None,
+            "created_at": mocker.ANY,
+            "room": mocker.ANY
+        }
+    ]
+def test_create_entity(client, entities):
+    response = client.post("/entities", json = {
+        "name": "test name",
+        "type": "sensor",
+        "status": "off",
+        "room": "00000000-0000-0000-0000-000000000001",
+    })
+    assert response.status_code == 201
+
+def test_remove_rooms(client, entities):
+    response = client.delete("/entities/00000000-0000-0000-0000-000000000001")
+    assert response.status_code == 204
+
+def test_update_rooms(client, entities):
+    response = client.put("/entities/00000000-0000-0000-0000-000000000002", json = {
+        "name": "test name",
+        "type": "sensor",
+        "status": "off",
+        "room": "00000000-0000-0000-0000-000000000001",
+    })
+    assert response.status_code == 204
