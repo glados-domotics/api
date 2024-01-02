@@ -18,3 +18,6 @@ class Room(db.Model, BaseModel):
 
     # Relationships
     entities = db.relationship("Entity", back_populates="room", uselist=True)
+
+    def serialize(self):
+        return {"id": self.id,  "name": self.name}
